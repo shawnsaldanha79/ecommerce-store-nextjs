@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { MdOutlineSearch } from "react-icons/md"
+import { HiOutlineShoppingBag } from "react-icons/hi"
 
 const AnnouncementBar = () => {
     return (
@@ -49,22 +51,22 @@ const Header = () => {
                             button
                         </button>
                         <nav className='hidden md:flex gap-4 lg:gap-6 text-sm font-medium'>
-                            <Link href={'#'}>Shop</Link>
-                            <Link href={'#'}>New Arrivals</Link>
-                            <Link href={'#'}>Sale</Link>
+                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>Shop</Link>
+                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>New Arrivals</Link>
+                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>Sale</Link>
                         </nav>
                     </div>
-                    <Link href={'#'}>
+                    <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
                         link
                     </Link>
                     <div className='flex flex-1 justify-end items-center gap-2 sm:gap-4'>
                         <button className='text-gray-700 hover:text-gray-800 hidden sm:block'>
-                            search
+                            <MdOutlineSearch  className='h-5 w-5 sm:h-6 sm:w-6'/>
                         </button>
-                        <Link href='/auth/sign-in'>Sign In</Link>
-                        <Link href='/auth/sign-up'>Sign Up</Link>
+                        <Link href='/auth/sign-in' className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>Sign In</Link>
+                        <Link href='/auth/sign-up' className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>Sign Up</Link>
                         <button className='text-gray-700 hover:text-gray-900 relative'>
-                            cart
+                            <HiOutlineShoppingBag  className='h-5 w-5 sm:h-6 sm:w-6'/>
                             <span className='absolute -top-1 -right-1 bg-black text-white text-[10px] sm:text-xs w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center'>
                                 0
                             </span>

@@ -8,7 +8,7 @@ import prisma from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-export function generateSessionToken(): string {
+export async function generateSessionToken(): Promise<string> {
 	const bytes = new Uint8Array(20);
 	crypto.getRandomValues(bytes);
 	const token = encodeBase32LowerCaseNoPadding(bytes);
