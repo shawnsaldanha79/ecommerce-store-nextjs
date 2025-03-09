@@ -1,9 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdOutlineSearch } from "react-icons/md"
-import { HiOutlineShoppingBag } from "react-icons/hi"
+import { MdOutlineShoppingBag } from "react-icons/md"
+import { User } from '@prisma/client'
+import { logoutUser } from '@/actions/auth'
+import { useRouter } from 'next/navigation'
+import { MdOutlineMenu } from "react-icons/md"
 
 const AnnouncementBar = () => {
     return (
@@ -17,7 +21,12 @@ const AnnouncementBar = () => {
     )
 }
 
-const Header = () => {
+type HeaderProps = {
+    user: Omit<User, 'passwordHash'> | null;
+};
+
+const Header = ({user}: HeaderProps) => {
+    const router = useRouter()
     const [isOpen, setIsOpen] = useState<boolean>(true)
     const [prevScrollY, setPrevScrollY] = useState<number>(0)
     useEffect(() => {
@@ -48,25 +57,56 @@ const Header = () => {
                 <div className='flex justify-between items-center container mx-auto px-8'>
                     <div className='flex flex-1 justify-start items-center gap-4 sm:gap-6'>
                         <button className='text-gray-700 hover:text-gray-900 md:hidden'>
-                            button
+                            <MdOutlineMenu className='h-5 w-5 sm:h-6 sm:w-6'/>
                         </button>
                         <nav className='hidden md:flex gap-4 lg:gap-6 text-sm font-medium'>
-                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>Shop</Link>
-                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>New Arrivals</Link>
-                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>Sale</Link>
+                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
+                                Shop
+                            </Link>
+                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
+                                New Arrivals
+                            </Link>
+                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
+                                Sale
+                            </Link>
                         </nav>
                     </div>
                     <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
-                        link
+                        <span className='text-xl sm:text-2xl font-bold tracking-tight text-gray-800'>
+                            DEAL
+                        </span>
                     </Link>
                     <div className='flex flex-1 justify-end items-center gap-2 sm:gap-4'>
                         <button className='text-gray-700 hover:text-gray-800 hidden sm:block'>
-                            <MdOutlineSearch  className='h-5 w-5 sm:h-6 sm:w-6'/>
+                            <MdOutlineSearch className='h-5 w-5 sm:h-6 sm:w-6'/>
                         </button>
-                        <Link href='/auth/sign-in' className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>Sign In</Link>
-                        <Link href='/auth/sign-up' className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>Sign Up</Link>
+                        {user ? (
+                                <div className='flex items-center gap-2 sm:gap-4'>
+                                    <span className='text-sm text-gray-700 hidden md:block'>{user.email}</span>
+                                    <Link
+                                        href='#'
+                                        className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'
+                                        onClick={async (e) => {
+                                            e.preventDefault();
+                                            await logoutUser();
+                                            router.refresh();
+                                        }}
+                                    >
+                                        Sign Out
+                                    </Link>
+                                </div>
+                            ) : (
+                                <React.Fragment>
+                                    <Link href='/auth/sign-in' className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
+                                        Sign In
+                                    </Link>
+                                    <Link href='/auth/sign-up' className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
+                                        Sign Up
+                                    </Link>
+                                </React.Fragment>
+                            )}
                         <button className='text-gray-700 hover:text-gray-900 relative'>
-                            <HiOutlineShoppingBag  className='h-5 w-5 sm:h-6 sm:w-6'/>
+                            <MdOutlineShoppingBag  className='h-5 w-5 sm:h-6 sm:w-6'/>
                             <span className='absolute -top-1 -right-1 bg-black text-white text-[10px] sm:text-xs w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center'>
                                 0
                             </span>
