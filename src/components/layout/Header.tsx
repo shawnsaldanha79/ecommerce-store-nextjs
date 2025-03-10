@@ -23,9 +23,10 @@ const AnnouncementBar = () => {
 
 type HeaderProps = {
     user: Omit<User, 'passwordHash'> | null;
+    categorySelector: React.ReactNode;
 };
 
-const Header = ({user}: HeaderProps) => {
+const Header = ({user, categorySelector}: HeaderProps) => {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState<boolean>(true)
     const [prevScrollY, setPrevScrollY] = useState<number>(0)
@@ -60,15 +61,10 @@ const Header = ({user}: HeaderProps) => {
                             <MdOutlineMenu className='h-5 w-5 sm:h-6 sm:w-6'/>
                         </button>
                         <nav className='hidden md:flex gap-4 lg:gap-6 text-sm font-medium'>
-                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
-                                Shop
-                            </Link>
-                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
-                                New Arrivals
-                            </Link>
-                            <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
+                            { categorySelector }
+                            {/* <Link href={'#'}>
                                 Sale
-                            </Link>
+                            </Link> */}
                         </nav>
                     </div>
                     <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
