@@ -23,7 +23,7 @@ const RootLayout = async ({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} antialiased bg-white min-h-[125vh]`}
+        className={`${inter.className} antialiased bg-gray-100 min-h-[125vh]`}
       >
           <Header user={user}/>
         {children}

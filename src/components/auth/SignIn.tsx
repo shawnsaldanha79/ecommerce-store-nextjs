@@ -16,9 +16,9 @@ const SignIn = ({ action }: SignInProps) => {
     const [state, formAction, isPending] = useActionState(action, initialState);
 
     return (
-        <Form action={formAction} className='max-w-md mx-auto my-16 p-8 bg-white rounded-lg shadow-md'>
+        <Form action={formAction} className='max-w-md mx-auto my-16 p-8 bg-white border border-gray-200 shadow-sm'>
             <h1 className='text-2xl font-bold text-center mb-2 text-gray-900'>Welcome Back!</h1>
-            <p className='text-center text-sm text-rose-600 font-semibold mb-2'>🔥 MEMBER EXCLUSIVE 🔥</p>
+            <p className='text-center text-sm text-gray-600 font-semibold mb-2'>🔥 MEMBER EXCLUSIVE 🔥</p>
             <p className='text-center text-sm text-gray-600 mb-6'>Sign in to access your exclusive member deals.</p>
 
             <div className='space-y-6'>
@@ -32,12 +32,12 @@ const SignIn = ({ action }: SignInProps) => {
                         name='email'
                         autoComplete='email'
                         required
-                        className='w-full px-4 py-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-black focus:border-transparent transition-colors text-gray-900'
+                        className='w-full px-4 py-3 border border-gray-200 focus:ring-2 focus:ring-black focus:border-transparent transition-colors text-gray-900'
                         placeholder='Enter your email'
                     />
                 </div>
 
-                <div className=''>
+                <div className='space-y-2'>
                     <label htmlFor='password' className='block text-sm font-medium text-gray-700'>
                         Password
                     </label>
@@ -45,22 +45,24 @@ const SignIn = ({ action }: SignInProps) => {
                         type='password'
                         id='password'
                         name='password'
-                        autoComplete='new-password'
+                        autoComplete='current-password'
                         required
-                        className='w-full px-4 py-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-black focus:border-transparent transition-colors text-gray-900'
-                        placeholder='Create a password'
+                        className='w-full px-4 py-3 border border-gray-200 focus:ring-2 focus:ring-black focus:border-transparent transition-colors text-gray-900'
+                        placeholder='Enter your password'
                     />
                 </div>
 
                 <div className='text-center'>
                     <p className='text-xs text-gray-500 mb-2'>⚡️ Members save an extra 15% on all orders!</p>
-                    <p className='text-xs text-gray-500 mb-4'>🛍️ Plug get free shipping on orders over $15.00</p>
+                    <p className='text-xs text-gray-500 mb-4'>🛍️ Get free shipping on orders over $15.00</p>
                 </div>
 
                 <button
                     type='submit'
                     disabled={isPending}
-                    className={`w-full bg-gray-700 text-white py-3 rounded-md border-1 hover:bg-white hover:text-gray-700 transition-colors font-medium flex items-center justify-center gap-2 ${isPending ? 'cursor-not-allowed' : ''}`}
+                    className={`w-full bg-black text-white py-3 font-medium flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors ${
+                        isPending ? 'cursor-not-allowed' : ''
+                    }`}
                 >
                     {isPending ? (
                         <React.Fragment>
@@ -73,9 +75,7 @@ const SignIn = ({ action }: SignInProps) => {
                 </button>
 
                 {state?.message && state.message.length > 0 && (
-                    <p className='text-center text-sm text-red-600'>
-                        {state.message}
-                    </p>
+                    <p className='text-center text-sm text-red-600'>{state.message}</p>
                 )}
             </div>
         </Form>
