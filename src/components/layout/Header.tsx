@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { MdOutlineSearch } from "react-icons/md"
 import { MdOutlineShoppingBag } from "react-icons/md"
 import { User } from '@prisma/client'
 import { logoutUser } from '@/actions/auth'
