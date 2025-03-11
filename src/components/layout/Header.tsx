@@ -8,6 +8,7 @@ import { User } from '@prisma/client'
 import { logoutUser } from '@/actions/auth'
 import { useRouter } from 'next/navigation'
 import { MdOutlineMenu } from "react-icons/md"
+import HeaderSearchBar from './HeaderSearchBar'
 
 const AnnouncementBar = () => {
     return (
@@ -67,15 +68,13 @@ const Header = ({user, categorySelector}: HeaderProps) => {
                             </Link> */}
                         </nav>
                     </div>
-                    <Link href={'#'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
+                    <Link href={'/'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
                         <span className='text-xl sm:text-2xl font-bold tracking-tight text-gray-800'>
                             DEAL
                         </span>
                     </Link>
                     <div className='flex flex-1 justify-end items-center gap-2 sm:gap-4'>
-                        <button className='text-gray-700 hover:text-gray-800 hidden sm:block'>
-                            <MdOutlineSearch className='h-5 w-5 sm:h-6 sm:w-6'/>
-                        </button>
+                        <HeaderSearchBar/>
                         {user ? (
                                 <div className='flex items-center gap-2 sm:gap-4'>
                                     <span className='text-sm text-gray-700 hidden md:block'>{user.email}</span>
