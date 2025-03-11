@@ -1,3 +1,4 @@
+import { getOrCreateCart, syncCartWithUser, updateCartItem } from '@/actions/cart-actions';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -39,22 +40,88 @@ export const useCartStore = create<CartStore>()(
 
             addItem: async (item) => {
                 const { cartId } = get();
-                
+                if (!cartId) {
+                    return;
+                }
+
+                const updatedCart = await updateCartItem(cartId, item.id, {
+                    title: item.title,
+                    price: item.price,
+                    image: item.image,
+                    quantity: item.quantity,
+                });
+
+                set((state) => {
+                    const existingItem = state.items.find((i) => i.id === item.id);
+                    if(existingItem) {
+                        return {
+                            ...state,
+                            cartId: updatedCart.id,
+                            items: state.items.map((i) => i.id === item.id ? { ...i, quantity: i.quantity + item.quantity} : i)
+                        }
+                    }
+                    return {
+                        ...state,
+                        cartId: updatedCart.id,
+                        items: [...state.items, { ...item }],
+                    };
+                });
             },
 
             removeItem: async (id) => {
                 const { cartId } = get();
-                
+                if (!cartId) {
+                    return;
+                }
+
+                const updatedCart = await updateCartItem(cartId, id, {
+                    quantity: 0,
+                });
+
+                set((state) => {
+                    return {
+                        ...state,
+                        cartId: updatedCart.id,
+                        items: state.items.filter((item) => item.id !== id)
+                    };
+                });
             },
 
             updateQuantity: async (id, quantity) => {
                 const { cartId } = get();
-                
+                if (!cartId) {
+                    return;
+                }
+
+                const updatedCart = await updateCartItem(cartId, id, {
+                    quantity: quantity,
+                });
+
+                set((state) => ({
+                    ...state,
+                    cartId: updatedCart.id,
+                    items: state.items.map((item) => item.id === id ? { ...item, quantity } : item)
+                }));
             },
 
             syncWithUser: async () => {
                 const { cartId } = get();
-                
+                if(!cartId) {
+                    const cart = await getOrCreateCart();
+                    set((state) => ({
+                        ...state,
+                        cartId: cart.id,
+                        items: cart.items
+                    }));
+                }
+                const syncedCart = await syncCartWithUser(cartId);
+                if(syncedCart) {
+                    set((state) => ({
+                        ...state,
+                        cartId: syncedCart.id,
+                        items: syncedCart.items,
+                    }))
+                }
             },
 
             clearCart: () => {
