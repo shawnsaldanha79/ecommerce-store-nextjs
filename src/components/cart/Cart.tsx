@@ -84,9 +84,7 @@ const Cart = () => {
             setLoaded(true);
         };
         initCart();
-    }, []);
-
-    // ADD CHECKOUT FUNCTION
+    }, [syncWithUser, setLoaded]);
 
     const totalPrice = getTotalPrice();
 
@@ -98,7 +96,7 @@ const Cart = () => {
         <>
             {isOpen && (
                 <div
-                    className='fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity backdrop-blur-sm'
+                    className='fixed inset-0 bg-black/50 bg-opacity-50 z-50 transition-opacity backdrop-blur-sm'
                     onClick={close}
                 />
             )}
@@ -111,26 +109,26 @@ const Cart = () => {
                 `}
             >
                 <div className='flex flex-col h-full'>
-                    <div className='flex items-center justify-between p-4 border-b bg-gray-50'>
+                    <div className='flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50'>
                         <div className='flex items-center gap-2'>
-                            <MdOutlineShoppingCart className='w-5 h-5' />
-                            <h2 className='text-lg font-semibold'>Shopping Cart</h2>
-                            <span className='bg-gray-200 px-2 py-1 rounded-full text-sm font-medium'>
+                            <MdOutlineShoppingCart className='w-5 h-5 text-gray-900' />
+                            <h2 className='text-lg font-semibold text-gray-900'>Shopping Cart</h2>
+                            <span className='bg-gray-200 px-2 py-1 text-sm font-medium text-gray-700'>
                                 {getTotalItems()}
                             </span>
                         </div>
                         <button
                             onClick={close}
-                            className='p-2 hover:bg-gray-200 rounded-full transition-colors'
+                            className='p-2 hover:bg-gray-200 transition-colors'
                         >
-                            <MdOutlineClose className='w-5 h-5' />
+                            <MdOutlineClose className='w-5 h-5 text-gray-900' />
                         </button>
                     </div>
-                    
+
                     <div className='flex-1 overflow-y-auto'>
                         {items.length === 0 ? (
                             <div className='flex flex-col items-center justify-center h-full p-4 text-center'>
-                                <div className='w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4'>
+                                <div className='w-16 h-16 bg-gray-100 flex items-center justify-center mb-4'>
                                     <MdOutlineShoppingCart className='w-8 h-8 text-gray-400' />
                                 </div>
                                 <h3 className='text-lg font-semibold text-gray-900 mb-2'>
@@ -142,40 +140,40 @@ const Cart = () => {
                                 <Link
                                     href="/"
                                     onClick={close}
-                                    className='bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-900 transition-colors'
+                                    className='bg-black text-white px-6 py-2 font-medium hover:bg-gray-900 transition-colors'
                                 >
                                     Start Shopping
                                 </Link>
                             </div>
                         ) : (
-                            <div className='divide-y'>
+                            <div className='divide-y divide-gray-200'>
                                 {items.map((item) => (
-                                    <CartItem key={'cart-item-'+item.id} item={item} />
+                                    <CartItem key={`cart-item-${item.id}`} item={item} />
                                 ))}
                             </div>
                         )}
                     </div>
 
                     {items.length > 0 && (
-                        <div className='border-t'>
+                        <div className='border-t border-gray-200'>
                             {remainingForFreeShipping > 0 ? (
-                                <div className='p-4 bg-blue-50 border-b'>
-                                    <div className='flex items-center gap-2 text-blue-800 mb-2'>
+                                <div className='p-4 bg-gray-50 border-b border-gray-200'>
+                                    <div className='flex items-center gap-2 text-gray-900 mb-2'>
                                         <span>🚚</span>
                                         <span className='font-medium'>
                                             Add {formatPrice(remainingForFreeShipping)} more for FREE shipping
                                         </span>
                                     </div>
-                                    <div className='w-full bg-blue-200 rounded-full h-2'>
+                                    <div className='w-full bg-gray-200 h-2'>
                                         <div
-                                            className='bg-blue-600 h-2 rounded-full transition-all duration-300'
+                                            className='bg-gray-900 h-2 transition-all duration-300'
                                             style={{ width: `${Math.min(100, (totalPrice / freeShippingAmount) * 100)}%` }}
                                         />
                                     </div>
                                 </div>
                             ) : (
-                                <div className='p-4 bg-green-50 border-b'>
-                                    <div className='flex items-center gap-2 text-green-800'>
+                                <div className='p-4 bg-gray-50 border-b border-gray-200'>
+                                    <div className='flex items-center gap-2 text-gray-900'>
                                         <span>✨</span>
                                         <span className='font-medium'>
                                             You have unlocked FREE shipping!
@@ -183,6 +181,49 @@ const Cart = () => {
                                     </div>
                                 </div>
                             )}
+
+                            <div className='p-4 space-y-4'>
+                                <div className='space-y-2'>
+                                    <div className='flex items-center justify-between text-sm'>
+                                        <span className='text-gray-500'>Subtotal</span>
+                                        <span className='font-medium'>{formatPrice(totalPrice)}</span>
+                                    </div>
+                                    <div className='flex items-center justify-between text-sm'>
+                                        <span className='text-gray-500'>Shipping</span>
+                                        <span className='font-medium'>
+                                            {remainingForFreeShipping > 0 ? 'Calculated at checkout' : 'FREE'}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className='border-t border-gray-200 pt-4'>
+                                    <div className='flex items-center justify-between mb-4'>
+                                        <span className='font-medium text-lg text-gray-900'>Total</span>
+                                        <span className='font-bold text-lg text-gray-900'>{formatPrice(totalPrice)}</span>
+                                    </div>
+
+                                    <button
+                                        className='w-full bg-black text-white py-4 font-bold hover:bg-gray-900 transition-colors flex items-center justify-center'
+                                    >
+                                        Proceed to Checkout
+                                    </button>
+
+                                    <div className='mt-4 space-y-2 text-sm text-gray-500'>
+                                        <div className='flex items-center gap-2'>
+                                            <span>🔒</span>
+                                            <span>Secure checkout</span>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <span>🔄</span>
+                                            <span>30-day returns</span>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <span>💳</span>
+                                            <span>All major payment methods accepted</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>

@@ -6,7 +6,6 @@ import { MdOutlineShoppingBag } from "react-icons/md"
 import { User } from '@prisma/client'
 import { logoutUser } from '@/actions/auth'
 import { useRouter } from 'next/navigation'
-import { MdOutlineMenu } from "react-icons/md"
 import HeaderSearchBar from './HeaderSearchBar'
 import { useCartStore } from '@/stores/cart-store'
 import { useShallow } from 'zustand/shallow'
@@ -65,14 +64,8 @@ const Header = ({user, categorySelector}: HeaderProps) => {
             <div className='w-full flex justify-between items-center py-3 sm:py-4 bg-white/80 shadow-sm border-b border-gray-100 backdrop-blur-sm'>
                 <div className='flex justify-between items-center container mx-auto px-8'>
                     <div className='flex flex-1 justify-start items-center gap-4 sm:gap-6'>
-                        <button className='text-gray-700 hover:text-gray-900 md:hidden'>
-                            <MdOutlineMenu className='h-5 w-5 sm:h-6 sm:w-6'/>
-                        </button>
-                        <nav className='hidden md:flex gap-4 lg:gap-6 text-sm font-medium'>
+                        <nav className='md:flex gap-4 lg:gap-6 text-sm font-medium'>
                             { categorySelector }
-                            {/* <Link href={'#'}>
-                                Sale
-                            </Link> */}
                         </nav>
                     </div>
                     <Link href={'/'} className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'>
@@ -86,7 +79,7 @@ const Header = ({user, categorySelector}: HeaderProps) => {
                                 <div className='flex items-center gap-2 sm:gap-4'>
                                     <span className='text-sm text-gray-700 hidden md:block'>{user.email}</span>
                                     <Link
-                                        href='#'
+                                        href='/'
                                         className='text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900'
                                         onClick={async (e) => {
                                             e.preventDefault();
