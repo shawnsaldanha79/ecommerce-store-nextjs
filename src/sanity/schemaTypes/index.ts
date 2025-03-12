@@ -1,3 +1,4 @@
+import { order, orderItem, shippingAddress } from './schemas/order'
 import { product } from './schemas/product'
 import { productCategory } from './schemas/product-category'
 import { promotionCampaign } from './schemas/promotion-campaign'
@@ -10,5 +11,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     promotionCampaign,
     productCategory,
     product,
+    shippingAddress,
+    orderItem,
+    order
   ],
 }
