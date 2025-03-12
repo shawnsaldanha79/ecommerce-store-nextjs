@@ -10,19 +10,16 @@ import { useShallow } from 'zustand/shallow';
 
 const freeShippingAmount = 15; // $15 for free shipping
 
-const CartItem = ({item}: {item: CartItemType}) => {
+const CartItem = ({ item }: { item: CartItemType }) => {
     const { removeItem, updateQuantity } = useCartStore(
         useShallow((state) => ({
             removeItem: state.removeItem,
             updateQuantity: state.updateQuantity,
         }))
     );
-
-    const isFreeItem = item.price === 0;
-
     return (
-        <div key={`cart-item-${item.id}`} className='flex gap-4 p-4 hover:bg-gray-50'>
-            <div className='relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border'>
+        <div key={`cart-item-${item.id}`} className='flex gap-4 p-4 hover:bg-gray-50 border-b border-gray-200'>
+            <div className='relative w-20 h-20 flex-shrink-0 border border-gray-200'>
                 <Image
                     src={item.image}
                     alt={item.title}
@@ -35,44 +32,34 @@ const CartItem = ({item}: {item: CartItemType}) => {
                 <h3 className='font-medium text-gray-900 truncate'>
                     {item.title}
                 </h3>
+
                 <div className='text-sm text-gray-500 mt-1'>
-                    {isFreeItem ? (
-                        <span className='text-emerald-600 font-medium'>FREE</span>
-                    ) : (
-                        formatPrice(item.price)
-                    )}
+                    { formatPrice(item.price) }
                 </div>
+
                 <div className='flex items-center gap-3 mt-2'>
-                    {isFreeItem ? (
-                        <div className='text-sm text-emerald-600 font-medium'>
-                            Prize Item
-                        </div>
-                    ) : (
-                        <>
-                            <select
-                                value={item.quantity}
-                                onChange={(e) => updateQuantity(item.id, Number(e.target.value))}
-                                className='border rounded-md px-2 py-1 text-sm bg-white'
-                            >
-                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                                    <option key={`cart-qty-slct-${item.id}-${num}`} value={num}>
-                                        {num}
-                                    </option>
-                                ))}
-                            </select>
-                            <button
-                                onClick={() => removeItem(item.id)}
-                                className='text-red-500 text-sm hover:text-red-600'
-                            >
-                                Remove
-                            </button>
-                        </>
-                    )}
+                    <select
+                        value={item.quantity}
+                        onChange={(e) => updateQuantity(item.id, Number(e.target.value))}
+                        className='border border-gray-200 px-2 py-1 text-sm bg-white focus:ring-1 focus:ring-black focus:border-transparent transition-colors'
+                    >
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                            <option key={`cart-qty-slct-${item.id}-${num}`} value={num}>
+                                {num}
+                            </option>
+                        ))}
+                    </select>
+                    <button
+                        onClick={() => removeItem(item.id)}
+                        className='text-red-600 text-sm hover:text-red-700 transition-colors'
+                    >
+                        Remove
+                    </button>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 const Cart = () => {
     const { cartId, removeItem, updateQuantity, items, close, isOpen, syncWithUser, setLoaded, getTotalPrice, getTotalItems } = useCartStore(
@@ -98,6 +85,8 @@ const Cart = () => {
         };
         initCart();
     }, []);
+
+    // ADD CHECKOUT FUNCTION
 
     const totalPrice = getTotalPrice();
 
